@@ -910,6 +910,11 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
 #define __Pyx_ErrFetch(type, value, tb)  PyErr_Fetch(type, value, tb)
 #endif
 
+/* WriteUnraisableException.proto */
+static void __Pyx_WriteUnraisable(const char *name, int clineno,
+                                  int lineno, const char *filename,
+                                  int full_traceback, int nogil);
+
 /* CLineInTraceback.proto */
 #ifdef CYTHON_CLINE_IN_TRACEBACK
 #define __Pyx_CLineForTraceback(tstate, c_line)  (((CYTHON_CLINE_IN_TRACEBACK)) ? c_line : 0)
@@ -974,7 +979,10 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 /* Module declarations from 'libc.stdint' */
 
 /* Module declarations from 'testOCV' */
-static PyObject *__pyx_f_7testOCV_readMat(std::string); /*proto*/
+static cv::Mat __pyx_f_7testOCV_readMat(std::string); /*proto*/
+static PyObject *__pyx_f_7testOCV_showMat(std::string, cv::Mat); /*proto*/
+static PyObject *__pyx_f_7testOCV_writeMat(std::string, cv::Mat); /*proto*/
+static cv::Mat __pyx_f_7testOCV_computeDiff(cv::Mat, cv::Mat); /*proto*/
 static std::string __pyx_convert_string_from_py_std__in_string(PyObject *); /*proto*/
 #define __Pyx_MODULE_NAME "testOCV"
 extern int __pyx_module_is_main_testOCV;
@@ -983,11 +991,14 @@ int __pyx_module_is_main_testOCV = 0;
 /* Implementation of 'testOCV' */
 static PyObject *__pyx_builtin_range;
 static const char __pyx_k_s[] = "s";
-static const char __pyx_k_do[] = "do";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_test[] = "__test__";
 static const char __pyx_k_Image[] = "Image";
+static const char __pyx_k_inImg[] = "inImg";
 static const char __pyx_k_range[] = "range";
+static const char __pyx_k_outImg[] = "outImg";
+static const char __pyx_k_compImg[] = "compImg";
+static const char __pyx_k_process[] = "process";
 static const char __pyx_k_testOCV[] = "testOCV";
 static const char __pyx_k_temp_jpg[] = "temp.jpg";
 static const char __pyx_k_testOCV_pyx[] = "testOCV.pyx";
@@ -996,173 +1007,264 @@ static const char __pyx_k_Error_Level_Analysis[] = "Error Level Analysis";
 static PyObject *__pyx_kp_b_Error_Level_Analysis;
 static PyObject *__pyx_n_b_Image;
 static PyObject *__pyx_n_s_cline_in_traceback;
-static PyObject *__pyx_n_s_do;
+static PyObject *__pyx_n_s_compImg;
+static PyObject *__pyx_n_s_inImg;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_outImg;
+static PyObject *__pyx_n_s_process;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_s;
 static PyObject *__pyx_kp_b_temp_jpg;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_testOCV;
 static PyObject *__pyx_kp_s_testOCV_pyx;
-static PyObject *__pyx_pf_7testOCV_do(CYTHON_UNUSED PyObject *__pyx_self, std::string __pyx_v_s); /* proto */
+static PyObject *__pyx_pf_7testOCV_process(CYTHON_UNUSED PyObject *__pyx_self, std::string __pyx_v_s); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_codeobj__2;
 
-/* "testOCV.pyx":4
- * from libcpp.string cimport string
+/* "testOCV.pyx":5
+ * from libc.string cimport memcpy
  * 
- * cdef readMat(string s):             # <<<<<<<<<<<<<<
- * 	cdef Mat inImg,compImg,outImg
- * 	inImg = imread(s,1)
+ * cdef Mat readMat(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat m = imread(s,1)
+ * 	return m
  */
 
-static PyObject *__pyx_f_7testOCV_readMat(std::string __pyx_v_s) {
-  cv::Mat __pyx_v_inImg;
-  cv::Mat __pyx_v_compImg;
-  cv::Mat __pyx_v_outImg;
+static cv::Mat __pyx_f_7testOCV_readMat(std::string __pyx_v_s) {
+  cv::Mat __pyx_v_m;
+  cv::Mat __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("readMat", 0);
+
+  /* "testOCV.pyx":6
+ * 
+ * cdef Mat readMat(string s):
+ * 	cdef Mat m = imread(s,1)             # <<<<<<<<<<<<<<
+ * 	return m
+ * 
+ */
+  __pyx_v_m = cv::imread(__pyx_v_s, 1);
+
+  /* "testOCV.pyx":7
+ * cdef Mat readMat(string s):
+ * 	cdef Mat m = imread(s,1)
+ * 	return m             # <<<<<<<<<<<<<<
+ * 
+ * cdef showMat(string s,Mat m):
+ */
+  __pyx_r = __pyx_v_m;
+  goto __pyx_L0;
+
+  /* "testOCV.pyx":5
+ * from libc.string cimport memcpy
+ * 
+ * cdef Mat readMat(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat m = imread(s,1)
+ * 	return m
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "testOCV.pyx":9
+ * 	return m
+ * 
+ * cdef showMat(string s,Mat m):             # <<<<<<<<<<<<<<
+ * 	imshow(s,m)
+ * 	waitKey(0)
+ */
+
+static PyObject *__pyx_f_7testOCV_showMat(std::string __pyx_v_s, cv::Mat __pyx_v_m) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("showMat", 0);
+
+  /* "testOCV.pyx":10
+ * 
+ * cdef showMat(string s,Mat m):
+ * 	imshow(s,m)             # <<<<<<<<<<<<<<
+ * 	waitKey(0)
+ * 
+ */
+  cv::imshow(__pyx_v_s, __pyx_v_m);
+
+  /* "testOCV.pyx":11
+ * cdef showMat(string s,Mat m):
+ * 	imshow(s,m)
+ * 	waitKey(0)             # <<<<<<<<<<<<<<
+ * 
+ * cdef writeMat(string s,Mat m):
+ */
+  cv::waitKey(0);
+
+  /* "testOCV.pyx":9
+ * 	return m
+ * 
+ * cdef showMat(string s,Mat m):             # <<<<<<<<<<<<<<
+ * 	imshow(s,m)
+ * 	waitKey(0)
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "testOCV.pyx":13
+ * 	waitKey(0)
+ * 
+ * cdef writeMat(string s,Mat m):             # <<<<<<<<<<<<<<
+ * 	imwrite(s,m)
+ * 
+ */
+
+static PyObject *__pyx_f_7testOCV_writeMat(std::string __pyx_v_s, cv::Mat __pyx_v_m) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("writeMat", 0);
+
+  /* "testOCV.pyx":14
+ * 
+ * cdef writeMat(string s,Mat m):
+ * 	imwrite(s,m)             # <<<<<<<<<<<<<<
+ * 
+ * cdef Mat computeDiff(Mat m1,Mat m2):
+ */
+  cv::imwrite(__pyx_v_s, __pyx_v_m);
+
+  /* "testOCV.pyx":13
+ * 	waitKey(0)
+ * 
+ * cdef writeMat(string s,Mat m):             # <<<<<<<<<<<<<<
+ * 	imwrite(s,m)
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "testOCV.pyx":16
+ * 	imwrite(s,m)
+ * 
+ * cdef Mat computeDiff(Mat m1,Mat m2):             # <<<<<<<<<<<<<<
+ * 	cdef Mat m3 = zeros(m1.rows,m1.cols,CV_8UC3)
+ * 	cdef uint8_t* ptr_in
+ */
+
+static cv::Mat __pyx_f_7testOCV_computeDiff(cv::Mat __pyx_v_m1, cv::Mat __pyx_v_m2) {
+  cv::Mat __pyx_v_m3;
   uint8_t *__pyx_v_ptr_in;
   uint8_t *__pyx_v_ptr_out;
   uint8_t *__pyx_v_ptr_comp;
   int __pyx_v_i;
   CYTHON_UNUSED long __pyx_v_j;
-  PyObject *__pyx_r = NULL;
+  cv::Mat __pyx_r;
   __Pyx_RefNannyDeclarations
-  std::string __pyx_t_1;
+  int __pyx_t_1;
   int __pyx_t_2;
   int __pyx_t_3;
-  int __pyx_t_4;
-  long __pyx_t_5;
-  int __pyx_t_6;
-  __Pyx_RefNannySetupContext("readMat", 0);
+  long __pyx_t_4;
+  int __pyx_t_5;
+  __Pyx_RefNannySetupContext("computeDiff", 0);
 
-  /* "testOCV.pyx":6
- * cdef readMat(string s):
- * 	cdef Mat inImg,compImg,outImg
- * 	inImg = imread(s,1)             # <<<<<<<<<<<<<<
+  /* "testOCV.pyx":17
+ * 
+ * cdef Mat computeDiff(Mat m1,Mat m2):
+ * 	cdef Mat m3 = zeros(m1.rows,m1.cols,CV_8UC3)             # <<<<<<<<<<<<<<
  * 	cdef uint8_t* ptr_in
  * 	cdef uint8_t* ptr_out
  */
-  __pyx_v_inImg = cv::imread(__pyx_v_s, 1);
+  __pyx_v_m3 = cv::Mat::zeros(__pyx_v_m1.rows, __pyx_v_m1.cols, CV_8UC3);
 
-  /* "testOCV.pyx":10
+  /* "testOCV.pyx":21
  * 	cdef uint8_t* ptr_out
  * 	cdef uint8_t* ptr_comp
- * 	imshow("Image",inImg)             # <<<<<<<<<<<<<<
- * 	imwrite("temp.jpg",inImg)
- * 	compImg = imread("temp.jpg",1)
+ * 	for i in range(m1.rows):             # <<<<<<<<<<<<<<
+ * 		ptr_in = m1.ptr(i)
+ * 		ptr_out = m3.ptr(i)
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_Image); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 10, __pyx_L1_error)
-  cv::imshow(__pyx_t_1, __pyx_v_inImg);
+  __pyx_t_1 = __pyx_v_m1.rows;
+  for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_1; __pyx_t_2+=1) {
+    __pyx_v_i = __pyx_t_2;
 
-  /* "testOCV.pyx":11
+    /* "testOCV.pyx":22
  * 	cdef uint8_t* ptr_comp
- * 	imshow("Image",inImg)
- * 	imwrite("temp.jpg",inImg)             # <<<<<<<<<<<<<<
- * 	compImg = imread("temp.jpg",1)
- * 	outImg = zeros(inImg.rows,inImg.cols,CV_8UC3)
+ * 	for i in range(m1.rows):
+ * 		ptr_in = m1.ptr(i)             # <<<<<<<<<<<<<<
+ * 		ptr_out = m3.ptr(i)
+ * 		ptr_comp = m2.ptr(i)
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_temp_jpg); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 11, __pyx_L1_error)
-  cv::imwrite(__pyx_t_1, __pyx_v_inImg);
+    __pyx_v_ptr_in = __pyx_v_m1.ptr(__pyx_v_i);
 
-  /* "testOCV.pyx":12
- * 	imshow("Image",inImg)
- * 	imwrite("temp.jpg",inImg)
- * 	compImg = imread("temp.jpg",1)             # <<<<<<<<<<<<<<
- * 	outImg = zeros(inImg.rows,inImg.cols,CV_8UC3)
- * 	for i in range(inImg.rows):
+    /* "testOCV.pyx":23
+ * 	for i in range(m1.rows):
+ * 		ptr_in = m1.ptr(i)
+ * 		ptr_out = m3.ptr(i)             # <<<<<<<<<<<<<<
+ * 		ptr_comp = m2.ptr(i)
+ * 		for j in range(0,m1.cols):
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_temp_jpg); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 12, __pyx_L1_error)
-  __pyx_v_compImg = cv::imread(__pyx_t_1, 1);
+    __pyx_v_ptr_out = __pyx_v_m3.ptr(__pyx_v_i);
 
-  /* "testOCV.pyx":13
- * 	imwrite("temp.jpg",inImg)
- * 	compImg = imread("temp.jpg",1)
- * 	outImg = zeros(inImg.rows,inImg.cols,CV_8UC3)             # <<<<<<<<<<<<<<
- * 	for i in range(inImg.rows):
- * 		ptr_in = inImg.ptr(i)
- */
-  __pyx_v_outImg = cv::Mat::zeros(__pyx_v_inImg.rows, __pyx_v_inImg.cols, CV_8UC3);
-
-  /* "testOCV.pyx":14
- * 	compImg = imread("temp.jpg",1)
- * 	outImg = zeros(inImg.rows,inImg.cols,CV_8UC3)
- * 	for i in range(inImg.rows):             # <<<<<<<<<<<<<<
- * 		ptr_in = inImg.ptr(i)
- * 		ptr_out = outImg.ptr(i)
- */
-  __pyx_t_2 = __pyx_v_inImg.rows;
-  for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
-    __pyx_v_i = __pyx_t_3;
-
-    /* "testOCV.pyx":15
- * 	outImg = zeros(inImg.rows,inImg.cols,CV_8UC3)
- * 	for i in range(inImg.rows):
- * 		ptr_in = inImg.ptr(i)             # <<<<<<<<<<<<<<
- * 		ptr_out = outImg.ptr(i)
- * 		ptr_comp = compImg.ptr(i)
- */
-    __pyx_v_ptr_in = __pyx_v_inImg.ptr(__pyx_v_i);
-
-    /* "testOCV.pyx":16
- * 	for i in range(inImg.rows):
- * 		ptr_in = inImg.ptr(i)
- * 		ptr_out = outImg.ptr(i)             # <<<<<<<<<<<<<<
- * 		ptr_comp = compImg.ptr(i)
- * 		for j in range(0,inImg.cols):
- */
-    __pyx_v_ptr_out = __pyx_v_outImg.ptr(__pyx_v_i);
-
-    /* "testOCV.pyx":17
- * 		ptr_in = inImg.ptr(i)
- * 		ptr_out = outImg.ptr(i)
- * 		ptr_comp = compImg.ptr(i)             # <<<<<<<<<<<<<<
- * 		for j in range(0,inImg.cols):
+    /* "testOCV.pyx":24
+ * 		ptr_in = m1.ptr(i)
+ * 		ptr_out = m3.ptr(i)
+ * 		ptr_comp = m2.ptr(i)             # <<<<<<<<<<<<<<
+ * 		for j in range(0,m1.cols):
  * 			ptr_out[0] = abs(ptr_in[0]-ptr_comp[0]) * 10
  */
-    __pyx_v_ptr_comp = __pyx_v_compImg.ptr(__pyx_v_i);
+    __pyx_v_ptr_comp = __pyx_v_m2.ptr(__pyx_v_i);
 
-    /* "testOCV.pyx":18
- * 		ptr_out = outImg.ptr(i)
- * 		ptr_comp = compImg.ptr(i)
- * 		for j in range(0,inImg.cols):             # <<<<<<<<<<<<<<
+    /* "testOCV.pyx":25
+ * 		ptr_out = m3.ptr(i)
+ * 		ptr_comp = m2.ptr(i)
+ * 		for j in range(0,m1.cols):             # <<<<<<<<<<<<<<
  * 			ptr_out[0] = abs(ptr_in[0]-ptr_comp[0]) * 10
  * 			ptr_out[1] = abs(ptr_in[1]-ptr_comp[1]) * 10
  */
-    __pyx_t_4 = __pyx_v_inImg.cols;
-    for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-      __pyx_v_j = __pyx_t_5;
+    __pyx_t_3 = __pyx_v_m1.cols;
+    for (__pyx_t_4 = 0; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
+      __pyx_v_j = __pyx_t_4;
 
-      /* "testOCV.pyx":19
- * 		ptr_comp = compImg.ptr(i)
- * 		for j in range(0,inImg.cols):
+      /* "testOCV.pyx":26
+ * 		ptr_comp = m2.ptr(i)
+ * 		for j in range(0,m1.cols):
  * 			ptr_out[0] = abs(ptr_in[0]-ptr_comp[0]) * 10             # <<<<<<<<<<<<<<
  * 			ptr_out[1] = abs(ptr_in[1]-ptr_comp[1]) * 10
  * 			ptr_out[2] = abs(ptr_in[2]-ptr_comp[2]) * 10
  */
-      __pyx_t_6 = abs(((__pyx_v_ptr_in[0]) - (__pyx_v_ptr_comp[0]))); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 19, __pyx_L1_error)
-      (__pyx_v_ptr_out[0]) = (__pyx_t_6 * 10);
+      __pyx_t_5 = abs(((__pyx_v_ptr_in[0]) - (__pyx_v_ptr_comp[0]))); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 26, __pyx_L1_error)
+      (__pyx_v_ptr_out[0]) = (__pyx_t_5 * 10);
 
-      /* "testOCV.pyx":20
- * 		for j in range(0,inImg.cols):
+      /* "testOCV.pyx":27
+ * 		for j in range(0,m1.cols):
  * 			ptr_out[0] = abs(ptr_in[0]-ptr_comp[0]) * 10
  * 			ptr_out[1] = abs(ptr_in[1]-ptr_comp[1]) * 10             # <<<<<<<<<<<<<<
  * 			ptr_out[2] = abs(ptr_in[2]-ptr_comp[2]) * 10
  * 			ptr_comp +=3
  */
-      __pyx_t_6 = abs(((__pyx_v_ptr_in[1]) - (__pyx_v_ptr_comp[1]))); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 20, __pyx_L1_error)
-      (__pyx_v_ptr_out[1]) = (__pyx_t_6 * 10);
+      __pyx_t_5 = abs(((__pyx_v_ptr_in[1]) - (__pyx_v_ptr_comp[1]))); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 27, __pyx_L1_error)
+      (__pyx_v_ptr_out[1]) = (__pyx_t_5 * 10);
 
-      /* "testOCV.pyx":21
+      /* "testOCV.pyx":28
  * 			ptr_out[0] = abs(ptr_in[0]-ptr_comp[0]) * 10
  * 			ptr_out[1] = abs(ptr_in[1]-ptr_comp[1]) * 10
  * 			ptr_out[2] = abs(ptr_in[2]-ptr_comp[2]) * 10             # <<<<<<<<<<<<<<
  * 			ptr_comp +=3
  * 			ptr_in += 3
  */
-      __pyx_t_6 = abs(((__pyx_v_ptr_in[2]) - (__pyx_v_ptr_comp[2]))); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 21, __pyx_L1_error)
-      (__pyx_v_ptr_out[2]) = (__pyx_t_6 * 10);
+      __pyx_t_5 = abs(((__pyx_v_ptr_in[2]) - (__pyx_v_ptr_comp[2]))); if (unlikely(__pyx_t_5 == ((int)-1))) __PYX_ERR(0, 28, __pyx_L1_error)
+      (__pyx_v_ptr_out[2]) = (__pyx_t_5 * 10);
 
-      /* "testOCV.pyx":22
+      /* "testOCV.pyx":29
  * 			ptr_out[1] = abs(ptr_in[1]-ptr_comp[1]) * 10
  * 			ptr_out[2] = abs(ptr_in[2]-ptr_comp[2]) * 10
  * 			ptr_comp +=3             # <<<<<<<<<<<<<<
@@ -1171,7 +1273,7 @@ static PyObject *__pyx_f_7testOCV_readMat(std::string __pyx_v_s) {
  */
       __pyx_v_ptr_comp = (__pyx_v_ptr_comp + 3);
 
-      /* "testOCV.pyx":23
+      /* "testOCV.pyx":30
  * 			ptr_out[2] = abs(ptr_in[2]-ptr_comp[2]) * 10
  * 			ptr_comp +=3
  * 			ptr_in += 3             # <<<<<<<<<<<<<<
@@ -1180,115 +1282,161 @@ static PyObject *__pyx_f_7testOCV_readMat(std::string __pyx_v_s) {
  */
       __pyx_v_ptr_in = (__pyx_v_ptr_in + 3);
 
-      /* "testOCV.pyx":24
+      /* "testOCV.pyx":31
  * 			ptr_comp +=3
  * 			ptr_in += 3
  * 			ptr_out += 3             # <<<<<<<<<<<<<<
  * 
- * 	imshow("Error Level Analysis",outImg)
+ * 	return m3
  */
       __pyx_v_ptr_out = (__pyx_v_ptr_out + 3);
     }
   }
 
-  /* "testOCV.pyx":26
+  /* "testOCV.pyx":33
  * 			ptr_out += 3
  * 
- * 	imshow("Error Level Analysis",outImg)             # <<<<<<<<<<<<<<
- * 	waitKey(0)
+ * 	return m3             # <<<<<<<<<<<<<<
  * 
+ * def process(string s):
  */
-  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_Error_Level_Analysis); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 26, __pyx_L1_error)
-  cv::imshow(__pyx_t_1, __pyx_v_outImg);
+  __pyx_r = __pyx_v_m3;
+  goto __pyx_L0;
 
-  /* "testOCV.pyx":27
+  /* "testOCV.pyx":16
+ * 	imwrite(s,m)
  * 
- * 	imshow("Error Level Analysis",outImg)
- * 	waitKey(0)             # <<<<<<<<<<<<<<
- * 
- * def do(string s):
- */
-  cv::waitKey(0);
-
-  /* "testOCV.pyx":4
- * from libcpp.string cimport string
- * 
- * cdef readMat(string s):             # <<<<<<<<<<<<<<
- * 	cdef Mat inImg,compImg,outImg
- * 	inImg = imread(s,1)
+ * cdef Mat computeDiff(Mat m1,Mat m2):             # <<<<<<<<<<<<<<
+ * 	cdef Mat m3 = zeros(m1.rows,m1.cols,CV_8UC3)
+ * 	cdef uint8_t* ptr_in
  */
 
   /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("testOCV.readMat", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
+  __Pyx_WriteUnraisable("testOCV.computeDiff", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "testOCV.pyx":29
- * 	waitKey(0)
+/* "testOCV.pyx":35
+ * 	return m3
  * 
- * def do(string s):             # <<<<<<<<<<<<<<
- * 	readMat(s)
+ * def process(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_7testOCV_1do(PyObject *__pyx_self, PyObject *__pyx_arg_s); /*proto*/
-static PyMethodDef __pyx_mdef_7testOCV_1do = {"do", (PyCFunction)__pyx_pw_7testOCV_1do, METH_O, 0};
-static PyObject *__pyx_pw_7testOCV_1do(PyObject *__pyx_self, PyObject *__pyx_arg_s) {
+static PyObject *__pyx_pw_7testOCV_1process(PyObject *__pyx_self, PyObject *__pyx_arg_s); /*proto*/
+static PyMethodDef __pyx_mdef_7testOCV_1process = {"process", (PyCFunction)__pyx_pw_7testOCV_1process, METH_O, 0};
+static PyObject *__pyx_pw_7testOCV_1process(PyObject *__pyx_self, PyObject *__pyx_arg_s) {
   std::string __pyx_v_s;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("do (wrapper)", 0);
+  __Pyx_RefNannySetupContext("process (wrapper)", 0);
   assert(__pyx_arg_s); {
-    __pyx_v_s = __pyx_convert_string_from_py_std__in_string(__pyx_arg_s); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L3_error)
+    __pyx_v_s = __pyx_convert_string_from_py_std__in_string(__pyx_arg_s); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 35, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
-  __Pyx_AddTraceback("testOCV.do", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("testOCV.process", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_7testOCV_do(__pyx_self, ((std::string)__pyx_v_s));
+  __pyx_r = __pyx_pf_7testOCV_process(__pyx_self, ((std::string)__pyx_v_s));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_7testOCV_do(CYTHON_UNUSED PyObject *__pyx_self, std::string __pyx_v_s) {
+static PyObject *__pyx_pf_7testOCV_process(CYTHON_UNUSED PyObject *__pyx_self, std::string __pyx_v_s) {
+  cv::Mat __pyx_v_inImg;
+  cv::Mat __pyx_v_outImg;
+  cv::Mat __pyx_v_compImg;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("do", 0);
+  std::string __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  __Pyx_RefNannySetupContext("process", 0);
 
-  /* "testOCV.pyx":30
- * 
- * def do(string s):
- * 	readMat(s)             # <<<<<<<<<<<<<<
+  /* "testOCV.pyx":37
+ * def process(string s):
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)             # <<<<<<<<<<<<<<
+ * 	writeMat("temp.jpg",inImg)
+ * 	showMat("Image",inImg)
  */
-  __pyx_t_1 = __pyx_f_7testOCV_readMat(__pyx_v_s); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_inImg = __pyx_f_7testOCV_readMat(__pyx_v_s);
 
-  /* "testOCV.pyx":29
- * 	waitKey(0)
+  /* "testOCV.pyx":38
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)
+ * 	writeMat("temp.jpg",inImg)             # <<<<<<<<<<<<<<
+ * 	showMat("Image",inImg)
+ * 	compImg = readMat("temp.jpg")
+ */
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_temp_jpg); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_7testOCV_writeMat(__pyx_t_1, __pyx_v_inImg); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "testOCV.pyx":39
+ * 	inImg = readMat(s)
+ * 	writeMat("temp.jpg",inImg)
+ * 	showMat("Image",inImg)             # <<<<<<<<<<<<<<
+ * 	compImg = readMat("temp.jpg")
+ * 	outImg = computeDiff(inImg,compImg)
+ */
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_n_b_Image); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_7testOCV_showMat(__pyx_t_1, __pyx_v_inImg); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "testOCV.pyx":40
+ * 	writeMat("temp.jpg",inImg)
+ * 	showMat("Image",inImg)
+ * 	compImg = readMat("temp.jpg")             # <<<<<<<<<<<<<<
+ * 	outImg = computeDiff(inImg,compImg)
+ * 	showMat("Error Level Analysis",outImg)
+ */
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_temp_jpg); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_v_compImg = __pyx_f_7testOCV_readMat(__pyx_t_1);
+
+  /* "testOCV.pyx":41
+ * 	showMat("Image",inImg)
+ * 	compImg = readMat("temp.jpg")
+ * 	outImg = computeDiff(inImg,compImg)             # <<<<<<<<<<<<<<
+ * 	showMat("Error Level Analysis",outImg)
+ */
+  __pyx_v_outImg = __pyx_f_7testOCV_computeDiff(__pyx_v_inImg, __pyx_v_compImg);
+
+  /* "testOCV.pyx":42
+ * 	compImg = readMat("temp.jpg")
+ * 	outImg = computeDiff(inImg,compImg)
+ * 	showMat("Error Level Analysis",outImg)             # <<<<<<<<<<<<<<
+ */
+  __pyx_t_1 = __pyx_convert_string_from_py_std__in_string(__pyx_kp_b_Error_Level_Analysis); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 42, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_7testOCV_showMat(__pyx_t_1, __pyx_v_outImg); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "testOCV.pyx":35
+ * 	return m3
  * 
- * def do(string s):             # <<<<<<<<<<<<<<
- * 	readMat(s)
+ * def process(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)
  */
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("testOCV.do", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("testOCV.process", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1389,8 +1537,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_b_Error_Level_Analysis, __pyx_k_Error_Level_Analysis, sizeof(__pyx_k_Error_Level_Analysis), 0, 0, 0, 0},
   {&__pyx_n_b_Image, __pyx_k_Image, sizeof(__pyx_k_Image), 0, 0, 0, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
-  {&__pyx_n_s_do, __pyx_k_do, sizeof(__pyx_k_do), 0, 0, 1, 1},
+  {&__pyx_n_s_compImg, __pyx_k_compImg, sizeof(__pyx_k_compImg), 0, 0, 1, 1},
+  {&__pyx_n_s_inImg, __pyx_k_inImg, sizeof(__pyx_k_inImg), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_outImg, __pyx_k_outImg, sizeof(__pyx_k_outImg), 0, 0, 1, 1},
+  {&__pyx_n_s_process, __pyx_k_process, sizeof(__pyx_k_process), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_s, __pyx_k_s, sizeof(__pyx_k_s), 0, 0, 1, 1},
   {&__pyx_kp_b_temp_jpg, __pyx_k_temp_jpg, sizeof(__pyx_k_temp_jpg), 0, 0, 0, 0},
@@ -1400,7 +1551,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 14, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 21, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -1410,16 +1561,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "testOCV.pyx":29
- * 	waitKey(0)
+  /* "testOCV.pyx":35
+ * 	return m3
  * 
- * def do(string s):             # <<<<<<<<<<<<<<
- * 	readMat(s)
+ * def process(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)
  */
-  __pyx_tuple_ = PyTuple_Pack(2, __pyx_n_s_s, __pyx_n_s_s); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(5, __pyx_n_s_s, __pyx_n_s_s, __pyx_n_s_inImg, __pyx_n_s_outImg, __pyx_n_s_compImg); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(1, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_testOCV_pyx, __pyx_n_s_do, 29, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(1, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_testOCV_pyx, __pyx_n_s_process, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -1579,21 +1731,22 @@ static int __pyx_pymod_exec_testOCV(PyObject *__pyx_pyinit_module)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "testOCV.pyx":29
- * 	waitKey(0)
+  /* "testOCV.pyx":35
+ * 	return m3
  * 
- * def do(string s):             # <<<<<<<<<<<<<<
- * 	readMat(s)
+ * def process(string s):             # <<<<<<<<<<<<<<
+ * 	cdef Mat inImg,outImg,compImg
+ * 	inImg = readMat(s)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7testOCV_1do, NULL, __pyx_n_s_testOCV); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_7testOCV_1process, NULL, __pyx_n_s_testOCV); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_do, __pyx_t_1) < 0) __PYX_ERR(0, 29, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_process, __pyx_t_1) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "testOCV.pyx":1
  * cimport testOCV             # <<<<<<<<<<<<<<
  * from libcpp.string cimport string
- * 
+ * from libc.string cimport memcpy
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -1687,6 +1840,48 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
     tstate->curexc_traceback = 0;
 }
 #endif
+
+/* WriteUnraisableException */
+static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
+}
 
 /* CLineInTraceback */
 #ifndef CYTHON_CLINE_IN_TRACEBACK
